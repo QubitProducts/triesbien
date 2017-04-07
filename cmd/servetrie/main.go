@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	triePath        = "./data/trie.gob"
+	triePath        = "./data/trie.pb"
 	maxLexemeLength = 10
 	maxBucketLength = 1024
 	leveldbPath     = "./data/leveldb"
@@ -53,7 +53,7 @@ func main() {
 	}
 	defer trieFile.Close()
 
-	err = t.UnmarshalGob(trieFile)
+	err = t.Unmarshal(trieFile)
 	if err != nil {
 		glog.Errorf("could not read trie: %v", err)
 		os.Exit(1)

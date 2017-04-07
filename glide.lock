@@ -1,10 +1,12 @@
-hash: 9e7100c5f7661c42b8c1a59ec01ebb61a43fe26b631b968b5162733ea66050d6
-updated: 2017-04-07T02:13:40.337855391+01:00
+hash: b0b63abc66f65557d65d118fb106c1eb84df2559f3c4a41c083df8e536006d09
+updated: 2017-04-07T11:32:55.77083638+01:00
 imports:
 - name: github.com/beorn7/perks
   version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
   subpackages:
   - quantile
+- name: github.com/gogo/protobuf
+  version: 6fe4aed35b712b681d5d372e06da5344c22ed61f
 - name: github.com/golang/glog
   version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
 - name: github.com/golang/protobuf

@@ -1,38 +1,50 @@
 package trie
 
 import (
-	"encoding/gob"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"sort"
 
+	trie_pb "github.com/QubitProducts/triesbien/trie/proto"
+	"github.com/gogo/protobuf/proto"
 	"github.com/golang/glog"
+	"github.com/pkg/errors"
 )
 
 type Trie struct {
-	root *trieEntry
+	root *trie_pb.Node
 }
 
 func NewTrie() *Trie {
 	return &Trie{
-		root: &trieEntry{
-			Children: []*trieEntry{},
+		root: &trie_pb.Node{
+			Children: []*trie_pb.Node{},
 		},
 	}
 }
 
-func (t *Trie) UnmarshalGob(buf io.Reader) error {
-	return gob.NewDecoder(buf).Decode(t.root)
+func (t *Trie) Unmarshal(r io.Reader) error {
+	bytes, err := ioutil.ReadAll(r)
+	if err != nil {
+		return errors.Wrap(err, "could not read")
+	}
+	return proto.Unmarshal(bytes, t.root)
 }
 
-func (t *Trie) MarshalGob(buf io.Writer) error {
-	return gob.NewEncoder(buf).Encode(t.root)
+func (t *Trie) Marshal(buf io.Writer) error {
+	bytes, err := proto.Marshal(t.root)
+	if err != nil {
+		return errors.Wrap(err, "could not unmarshal")
+	}
+	_, err = buf.Write(bytes)
+	return errors.Wrap(err, "could not write")
 }
 
 func (t *Trie) String() string {
 	childChars := make([]rune, len(t.root.Children))
 	for i, c := range t.root.Children {
-		childChars[i] = c.Char
+		childChars[i] = rune(c.Char)
 	}
 	return fmt.Sprintf("children: %s", string(childChars))
 }
@@ -40,7 +52,7 @@ func (t *Trie) String() string {
 func (t *Trie) Lookup(value []rune) []uint32 {
 	n := t.root
 	for i := 0; i < len(value); i++ {
-		child := n.findChild(value[i])
+		child := findChild(n, value[i])
 		if child == nil {
 			return nil
 		}
@@ -49,17 +61,17 @@ func (t *Trie) Lookup(value []rune) []uint32 {
 	return n.TopEntries
 }
 
-func (t *Trie) lookupOrInsert(value []rune) *trieEntry {
+func (t *Trie) lookupOrInsert(value []rune) *trie_pb.Node {
 	n := t.root
 	for i := 0; i < len(value); i++ {
-		child := n.findChild(value[i])
+		child := findChild(n, value[i])
 		if child != nil {
 			n = child
 		} else {
-			child = &trieEntry{
-				Char:       value[i],
+			child = &trie_pb.Node{
+				Char:       uint32(value[i]),
 				TopEntries: []uint32{},
-				Children:   []*trieEntry{},
+				Children:   []*trie_pb.Node{},
 			}
 			n.Children = append(n.Children, child)
 			n = child
@@ -79,7 +91,7 @@ func (t *Trie) Append(value []rune, entry uint32) {
 }
 
 func (t *Trie) MergeUpwards(maxEntries int) {
-	t.iterateLRN(t.root, func(e *trieEntry) {
+	t.iterateLRN(t.root, func(e *trie_pb.Node) {
 		if len(e.TopEntries) > maxEntries {
 			e.TopEntries = e.TopEntries[0:maxEntries]
 		}
@@ -116,22 +128,16 @@ func (t *Trie) MergeUpwards(maxEntries int) {
 	})
 }
 
-func (t *Trie) iterateLRN(n *trieEntry, cb func(*trieEntry)) {
+func (t *Trie) iterateLRN(n *trie_pb.Node, cb func(*trie_pb.Node)) {
 	for _, child := range n.Children {
 		t.iterateLRN(child, cb)
 	}
 	cb(n)
 }
 
-type trieEntry struct {
-	Char       rune
-	TopEntries []uint32
-	Children   []*trieEntry
-}
-
-func (e trieEntry) findChild(c rune) *trieEntry {
-	for _, child := range e.Children {
-		if child.Char == c {
+func findChild(node *trie_pb.Node, c rune) *trie_pb.Node {
+	for _, child := range node.Children {
+		if child.Char == uint32(c) {
 			return child
 		}
 	}

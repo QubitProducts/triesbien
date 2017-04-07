@@ -25,7 +25,7 @@ import (
 var (
 	searchQuery     = "tank"
 	trieWrite       = false
-	triePath        = "./data/trie.gob"
+	triePath        = "./data/trie.pb"
 	maxLexemeLength = 10
 	maxBucketLength = 1024
 	leveldbPath     = "./data/leveldb"
@@ -97,6 +97,7 @@ func main() {
 			return errors.Wrap(err, "could not write leveldb")
 		})
 	} else {
+		started := time.Now()
 		trieFile, err := os.Open(triePath)
 		if err != nil {
 			glog.Errorf("could not open trie path to read: %v", err)
@@ -104,11 +105,12 @@ func main() {
 		}
 		defer trieFile.Close()
 
-		err = t.UnmarshalGob(trieFile)
+		err = t.Unmarshal(trieFile)
 		if err != nil {
 			glog.Errorf("could not read trie: %v", err)
 			os.Exit(1)
 		}
+		glog.Infof("loaded trie in %v", time.Since(started))
 	}
 
 	if err := grp.Wait(); err != nil {
@@ -124,7 +126,7 @@ func main() {
 		}
 		defer trieFile.Close()
 
-		err = t.MarshalGob(trieFile)
+		err = t.Marshal(trieFile)
 		if err != nil {
 			glog.Errorf("could not write trie: %v", err)
 			os.Exit(1)

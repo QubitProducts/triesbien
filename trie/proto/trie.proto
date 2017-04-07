@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+message Node {
+  uint32 char = 1;
+  repeated uint32 topEntries = 2;
+  repeated Node children = 3;
+}
