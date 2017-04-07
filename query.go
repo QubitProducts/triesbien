@@ -23,6 +23,9 @@ func Query(t *trie.Trie, db *leveldb.DB, config Config, query string) ([]string,
 		glog.Infof("Looking up %v\n", part)
 		results[i] = t.Lookup([]rune(part))
 		glog.Infof("%v results", len(results[i]))
+		if glog.V(4) {
+			glog.Infof("%v", results[i])
+		}
 
 		if len(results[i]) >= config.MaxBucketLength {
 			if len(requireManualSearch) == 0 ||
