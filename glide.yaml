@@ -1,0 +1,14 @@
+package: github.com/QubitProducts/triesbien
+import:
+- package: github.com/golang/glog
+- package: github.com/pkg/errors
+- package: github.com/pressly/chi
+- package: github.com/prometheus/client_golang
+  subpackages:
+  - prometheus
+- package: github.com/syndtr/goleveldb
+  subpackages:
+  - leveldb
+- package: golang.org/x/sync
+  subpackages:
+  - errgroup

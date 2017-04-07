@@ -1,0 +1,65 @@
+hash: 9e7100c5f7661c42b8c1a59ec01ebb61a43fe26b631b968b5162733ea66050d6
+updated: 2017-04-07T02:13:40.337855391+01:00
+imports:
+- name: github.com/beorn7/perks
+  version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
+  subpackages:
+  - quantile
+- name: github.com/golang/glog
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
+- name: github.com/golang/protobuf
+  version: 2bba0603135d7d7f5cb73b2125beeda19c09f4ef
+  subpackages:
+  - proto
+- name: github.com/golang/snappy
+  version: 553a641470496b2327abcac10b36396bd98e45c9
+- name: github.com/matttproud/golang_protobuf_extensions
+  version: c12348ce28de40eed0136aa2b644d0ee0650e56c
+  subpackages:
+  - pbutil
+- name: github.com/pkg/errors
+  version: ff09b135c25aae272398c51a07235b90a75aa4f0
+- name: github.com/pressly/chi
+  version: 157587f33c258f3590967dfc7be2e75c0aa1cdf3
+- name: github.com/prometheus/client_golang
+  version: 08fd2e12372a66e68e30523c7642e0cbc3e4fbde
+  subpackages:
+  - prometheus
+- name: github.com/prometheus/client_model
+  version: 6f3806018612930941127f2a7c6c453ba2c527d2
+  subpackages:
+  - go
+- name: github.com/prometheus/common
+  version: 49fee292b27bfff7f354ee0f64e1bc4850462edf
+  subpackages:
+  - expfmt
+  - internal/bitbucket.org/ww/goautoneg
+  - model
+- name: github.com/prometheus/procfs
+  version: a1dba9ce8baed984a2495b658c82687f8157b98f
+  subpackages:
+  - xfs
+- name: github.com/syndtr/goleveldb
+  version: 3c5717caf1475fd25964109a0fc640bd150fce43
+  subpackages:
+  - leveldb
+  - leveldb/cache
+  - leveldb/comparer
+  - leveldb/errors
+  - leveldb/filter
+  - leveldb/iterator
+  - leveldb/journal
+  - leveldb/memdb
+  - leveldb/opt
+  - leveldb/storage
+  - leveldb/table
+  - leveldb/util
+- name: golang.org/x/net
+  version: d1e1b351919c6738fdeb9893d5c998b161464f0c
+  subpackages:
+  - context
+- name: golang.org/x/sync
+  version: 5a06fca2c336a4b2b2fcb45702e8c47621b2aa2c
+  subpackages:
+  - errgroup
+testImports: []
