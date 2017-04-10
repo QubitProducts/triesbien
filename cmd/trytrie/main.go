@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/binary"
 	"flag"
 	"fmt"
 	"os"
@@ -94,7 +93,7 @@ func main() {
 		})
 		grp.Go(func() error {
 			err := triesbien.BuildTrie(ctx, t, config, trieChan)
-			return errors.Wrap(err, "could not write leveldb")
+			return errors.Wrap(err, "could not build trie")
 		})
 	} else {
 		started := time.Now()
@@ -197,10 +196,4 @@ func parseProductTitle(title string) []string {
 		}
 	}
 	return parts
-}
-
-func toBS(ix uint32) []byte {
-	ret := make([]byte, 4)
-	binary.LittleEndian.PutUint32(ret, ix)
-	return ret
 }

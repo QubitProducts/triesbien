@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -131,8 +130,70 @@ func parseProductTitle(title string) []string {
 	return parts
 }
 
-func toBS(ix uint32) []byte {
-	ret := make([]byte, 4)
-	binary.LittleEndian.PutUint32(ret, ix)
-	return ret
+func splitOn(r rune) bool {
+	return unicode.IsSpace(r) || unicode.IsSymbol(r) || unicode.IsPunct(r)
+}
+
+var (
+	validPart = regexp.MustCompile(`^[a-z0-9]*([a-z]|[0-9]{2})[a-z0-9]*$`)
+)
+
+func parseProductTitle(title string) []string {
+	title = strings.ToLower(title)
+
+	lastSplit := 0
+
+	parts := []string{}
+
+	for i, r := range title {
+		if splitOn(r) {
+			part := title[lastSplit:i]
+			if validPart.MatchString(part) {
+				parts = append(parts, part)
+			}
+
+			lastSplit = i + 1
+		}
+	}
+	if lastSplit != len(title) {
+		part := title[lastSplit:len(title)]
+		if validPart.MatchString(part) {
+			parts = append(parts, part)
+		}
+	}
+	return parts
+}
+
+func splitOn(r rune) bool {
+	return unicode.IsSpace(r) || unicode.IsSymbol(r) || unicode.IsPunct(r)
+}
+
+var (
+	validPart = regexp.MustCompile(`^[a-z0-9]*([a-z]|[0-9]{2})[a-z0-9]*$`)
+)
+
+func parseProductTitle(title string) []string {
+	title = strings.ToLower(title)
+
+	lastSplit := 0
+
+	parts := []string{}
+
+	for i, r := range title {
+		if splitOn(r) {
+			part := title[lastSplit:i]
+			if validPart.MatchString(part) {
+				parts = append(parts, part)
+			}
+
+			lastSplit = i + 1
+		}
+	}
+	if lastSplit != len(title) {
+		part := title[lastSplit:len(title)]
+		if validPart.MatchString(part) {
+			parts = append(parts, part)
+		}
+	}
+	return parts
 }

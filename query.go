@@ -20,9 +20,9 @@ func Query(t *trie.Trie, db *leveldb.DB, config Config, query string) ([]string,
 			requireManualSearch = append(requireManualSearch, part)
 			part = part[0:config.MaxLexemeLength]
 		}
-		glog.Infof("Looking up %v\n", part)
+		glog.V(2).Infof("Looking up %v\n", part)
 		results[i] = t.Lookup([]rune(part))
-		glog.Infof("%v results", len(results[i]))
+		glog.V(2).Infof("%v results", len(results[i]))
 		if glog.V(4) {
 			glog.Infof("%v", results[i])
 		}
